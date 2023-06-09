@@ -1,0 +1,25 @@
+.menu{
+    background:#084408;
+    height: 50px;
+    
+}
+.menu ul{
+    display: flex;
+    gap:40px;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Stegoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.menu ul li{
+    color: #fff;
+    list-style-type: none;
+    height: 50px;
+    padding-top: 10px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.4;
+    min-height: 35px;
+}
+.menu ul li:hover{
+    background-color: #0fb587;
+    height: 40px;
+}
