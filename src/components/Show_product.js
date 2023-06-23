@@ -37,24 +37,31 @@ const Show = () => {
     setSearchResults(results);
   };
 
-const addToCart = async (item) => {
-  try {
-    const cartItem = {
-      ...item
-    };
+  const addToCart = async (item) => {
+    try {
+      const cartItem = {
+        ...item,
+        quantity: 1,
+        totalPrice: item.price
+      };
 
-    // Gửi yêu cầu POST để thêm sản phẩm vào mock API
-    await axios.post('https://6410c403da042ca131fb737e.mockapi.io/gioHang', cartItem);
+      const existingItem = cartItems.find((item) => item.id === cartItem.id);
 
-    // Cập nhật giỏ hàng trong state
-    setCartItems([...cartItems, cartItem]);
+      if (existingItem) {
+        existingItem.quantity += 1;
+        existingItem.totalPrice += item.price;
+      } else {
+        setCartItems([...cartItems, cartItem]);
+      }
 
-    console.log('Thêm vào giỏ hàng thành công');
-    alert('Thêm vào giỏ hàng thành công!');
-  } catch (error) {
-    console.log('Lỗi khi thêm vào giỏ hàng:', error);
-  }
-};
+      await axios.post('https://6410c403da042ca131fb737e.mockapi.io/gioHang', cartItem);
+
+      console.log('Thêm vào giỏ hàng thành công');
+      alert('Thêm vào giỏ hàng thành công!');
+    } catch (error) {
+      console.log('Lỗi khi thêm vào giỏ hàng:', error);
+    }
+  };
 
 
   const handleCartIconClick = () => {
