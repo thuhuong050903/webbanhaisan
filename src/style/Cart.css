@@ -1,0 +1,15 @@
+.space-between-buttons {
+    margin: 0 10px; /* Điều chỉnh giá trị margin tùy theo yêu cầu của bạn */
+  }
+  
+
+.tang-button {
+    width: 40px;
+    background-color: #dd0000;
+}
+
+.giam-button {
+    width: 40px;
+    background-color: gainsboro;
+    color: black;
+}

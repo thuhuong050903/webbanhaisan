@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link} from 'react-router-dom';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Cart from './Cart';
 import '../style/Show.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
 
 const Show = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -19,10 +25,6 @@ const Show = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -35,23 +37,57 @@ const Show = () => {
     setSearchResults(results);
   };
 
-  const addToCart = async (item) => {
-    try {
-      await axios.post(`https://6410c403da042ca131fb737e.mockapi.io/gioHang`, item);
-      setCartItems([...cartItems, item]);
-      console.log("Thêm vào giỏ hàng thành công");
-    } catch (error) {
-      console.log("Lỗi khi thêm vào giỏ hàng:", error);
-    }
+const addToCart = async (item) => {
+  try {
+    const cartItem = {
+      ...item
+    };
+
+    // Gửi yêu cầu POST để thêm sản phẩm vào mock API
+    await axios.post('https://6410c403da042ca131fb737e.mockapi.io/gioHang', cartItem);
+
+    // Cập nhật giỏ hàng trong state
+    setCartItems([...cartItems, cartItem]);
+
+    console.log('Thêm vào giỏ hàng thành công');
+    alert('Thêm vào giỏ hàng thành công!');
+  } catch (error) {
+    console.log('Lỗi khi thêm vào giỏ hàng:', error);
+  }
+};
+
+
+  const handleCartIconClick = () => {
+    setShowCart(true);
+    // window.location.href = '/giohang'; // Loại bỏ dòng này
   };
+
+  if (showCart) {
+    return <Cart cartItems={cartItems} />;
+  }
+
   return (
     <div className="container">
+      <header>
+        <h1>Website của bạn</h1>
+        <button onClick={handleCartIconClick}>Giỏ hàng</button>
+      </header>
+      <br />
       <br />
       <h3 className="colection">SẢN PHẨM NỔI BẬT</h3>
       <br />
-      <input type="text" placeholder="Vui lòng nhập từ khóa cần tìm" value={searchTerm} onChange={handleSearch} className='input' />
-      <button className='button-search' onClick={handleSearchButton}>Tìm kiếm</button>
-      <br /><br />
+      <input
+        type="text"
+        placeholder="Vui lòng nhập từ khóa cần tìm"
+        value={searchTerm}
+        onChange={handleSearch}
+        className="input"
+      />
+      <button className="button-search" onClick={handleSearchButton}>
+        Tìm kiếm
+      </button>
+      <br />
+      <br />
       <div className="row">
         {searchResults.map((e) => (
           <div className="col-md-3" key={e.id}>
@@ -63,11 +99,13 @@ const Show = () => {
                 <p className="card-text">{e.description}</p>
                 <p className="card_price"> {e.price}</p>
                 <div className="function">
-                  <Link className="button1" to={`/shopping/${e.id}`}>
+                  <button className="button1" onClick={() => addToCart(e)}>
                     Thêm giỏ hàng
+                  </button>
+                  <Link className="button1" to={`/product/${e.id}`}>
+                    Chi tiết
                   </Link>
-                  <Link className='button1' to={`/product/${e.id}`} >Chi tiết</Link>
-                  <button className='button'>Mua ngay</button>
+                  <button className="button">Mua ngay</button>
                 </div>
               </div>
             </div>

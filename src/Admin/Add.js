@@ -58,7 +58,7 @@ const Add = () => {
               </div>
               <div className="form-group">
                 <label>Giá</label>
-                <input type="text" className="form-control" value={newProduct.price} onChange={handleInputChange} name="price" />
+                <input type="number" className="form-control" value={newProduct.price} onChange={handleInputChange} name="price" />
               </div>
               <div className="form-group">
                 <label>Loai</label>

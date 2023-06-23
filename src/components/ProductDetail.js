@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Link} from 'react-router-dom';
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -16,7 +16,24 @@ const ProductDetail = () => {
       }
     };
 
-    fetchProduct();}, [id]);
+    fetchProduct();
+  }, [id]);
+
+  const addToCart = async () => {
+    try {
+      const cartItem = {
+        ...product
+      };
+
+      // Gửi yêu cầu POST để thêm sản phẩm vào mock API
+      await axios.post('https://6410c403da042ca131fb737e.mockapi.io/gioHang', cartItem);
+
+      console.log('Thêm vào giỏ hàng thành công');
+      alert('Thêm vào giỏ hàng thành công!');
+    } catch (error) {
+      console.log('Lỗi khi thêm vào giỏ hàng:', error);
+    }
+  };
 
   if (!product) {
     return <div>Loading...</div>;
@@ -28,7 +45,7 @@ const ProductDetail = () => {
       <div className='row'>
         <div className='col-md-4'>
           <div className='image'>
-          <img src={product.image} alt={product.name} className="card-img-top" />
+            <img src={product.image} alt={product.name} className="card-img-top" />
           </div>
         </div>
         <div className='col-md-8'>
@@ -39,16 +56,15 @@ const ProductDetail = () => {
             <p className="card_price"> {product.price}</p>
           </div>
           <div className='function'>
-            <Link className="button1"to={`/shopping/${product.id}`}>
-                THÊM GIỎ HÀNG
-            </Link>
+            <button className="button1" onClick={addToCart}>
+              THÊM GIỎ HÀNG
+            </button>
             <button className='button'>Mua ngay</button>
           </div>
         </div>
       </div>
-  <br></br>
-</div>
-    
+      <br></br>
+    </div>
   );
 };
 
