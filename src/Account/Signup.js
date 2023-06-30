@@ -98,22 +98,27 @@ const Signup = () => {
 
 		const validationErrors = validate();
 
-		if (Object.keys(validationErrors).length === 0 && !isUsernameTaken && !isEmailTaken) {
-			const signupData = {
-				username: username,
-				email: email,
-				password: password,
-			};
+		if (Object.keys(validationErrors).length === 0) {
+			if (isUsernameTaken || isEmailTaken) {
+				setErrors({});
+				console.log("Đăng ký thất bại: Tên đăng nhập hoặc email đã tồn tại");
+			} else {
+				const signupData = {
+					username: username,
+					email: email,
+					password: password,
+				};
 
-			axios
-				.post("https://63a572122a73744b008e28d5.mockapi.io/api/account", signupData)
-				.then((response) => {
-					console.log("Đăng ký thành công:", response.data);
-					navigate("/login"); // Chuyển hướng đến trang Login sau khi đăng ký thành công
-				})
-				.catch((error) => {
-					console.error("Đăng ký thất bại:", error);
-				});
+				axios
+					.post("https://63a572122a73744b008e28d5.mockapi.io/api/account", signupData)
+					.then((response) => {
+						console.log("Đăng ký thành công:", response.data);
+						navigate("/login"); // Chuyển hướng đến trang Login sau khi đăng ký thành công
+					})
+					.catch((error) => {
+						console.error("Đăng ký thất bại:", error);
+					});
+			}
 		} else {
 			setErrors(validationErrors);
 		}
